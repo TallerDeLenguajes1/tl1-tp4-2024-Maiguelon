@@ -38,7 +38,47 @@ int main()
 
     // Muestro
     mostrarTareas(listaPendientes);
+
+    // Creo una lista vacia
+    Nodo *listaCompletos;
+    listaCompletos = crearLista();
+
+    int sino;
+    printf("Desea marcar tareas como completadas? (0=si,1=no)");
+    scanf("%d", &sino);
+
+    if (sino == 0)
+    {
+        int id;
+        printf("Introduzca el id de la tarea completada");
+        scanf("%d", &id);
+        id = id + 999;
+        
+        Nodo *Auxiliar = listaPendientes;
+        Nodo *Anterior = NULL;
+        while (Auxiliar && Auxiliar->T.TareaID != id)
+        {
+            Anterior = Auxiliar;
+            Auxiliar = Auxiliar->Siguiente;
+        }
+
+        if(!Auxiliar) {
+            printf("No existe tarea con ese id");
+        } else {
+            if (Anterior == NULL) {
+                listaPendientes = listaPendientes->Siguiente;
+                Auxiliar->Siguiente = NULL;
+                agregarFinal(&listaCompletos, Auxiliar);
+            } else {
+                Anterior->Siguiente = Auxiliar->Siguiente;
+                Auxiliar->Siguiente = NULL;
+                agregarFinal(&listaCompletos, Auxiliar);
+            }
+        }
+    }
+    mostrarTareas(listaCompletos);
 }
+
 
 Nodo *crearNodo(Tarea tarea)
 {
@@ -71,16 +111,15 @@ void agregarPrincipio(Nodo **lista, Nodo *nodo)
 
 void agregarFinal(Nodo **lista, Nodo *nodo)
 {
-    // Declaro un nodo Aux para no perder la cabecera
-    Nodo *Aux = *lista;
-
     // Control Lista Vacia
-    if (Aux == NULL)
+    if (*lista == NULL)
     {
-        Aux = nodo;
+        *lista = nodo;
     }
     else
     {
+        // Declaro un nodo Aux para no perder la cabecera
+        Nodo *Aux = *lista;
         // Mientras el aux no sea nulo mueve la cabecera
         while (Aux->Siguiente)
         {
@@ -89,17 +128,16 @@ void agregarFinal(Nodo **lista, Nodo *nodo)
         // Al compartir direccion de memoria, conectando con Aux conecto con lista.
         Aux->Siguiente = nodo;
     }
-
-   
 }
 
 int seguirCargando(char seguir)
 {
     int respuesta = 1;
 
-    if (seguir == 's' || seguir == 'S') {
+    if (seguir == 's' || seguir == 'S')
+    {
         respuesta = 0;
-    } 
+    }
     return respuesta;
 }
 
@@ -155,15 +193,19 @@ void preguntarTarea(Nodo **lista)
 void mostrarTareas(Nodo *lista)
 {
     // Compruebo que la lista no este vacia
-    if (lista == NULL) {
+    if (lista == NULL)
+    {
         printf("No hay tareas en esta categoria");
-    } else { // muestro los elementos hasta terminar la lista
-        while (lista != NULL) {
-        printf("Tarea:\n");
-        printf("\tDescripcion: %s\n", lista->T.Descripcion);
-        printf("\tDuracion: %d\n", lista->T.Duracion);
+    }
+    else
+    { // muestro los elementos hasta terminar la lista
+        while (lista != NULL)
+        {
+            printf("Tarea:\n");
+            printf("\tDescripcion: %s\n", lista->T.Descripcion);
+            printf("\tDuracion: %d\n", lista->T.Duracion);
 
-        lista = lista->Siguiente;
+            lista = lista->Siguiente;
         }
     }
 }
