@@ -53,7 +53,7 @@ int main()
         printf("Introduzca el id de la tarea completada");
         scanf("%d", &id);
         id = id + 999;
-        
+
         Nodo *Auxiliar = listaPendientes;
         Nodo *Anterior = NULL;
         while (Auxiliar && Auxiliar->T.TareaID != id)
@@ -76,6 +76,7 @@ int main()
             }
         }
     }
+    printf("Lista de tareas completas:\n");
     mostrarTareas(listaCompletos);
 }
 
